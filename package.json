@@ -21,7 +21,7 @@
     "react-dom": "^19.0.0",
     "better-auth": "^1.2.0",
     "drizzle-orm": "^0.38.0",
-    "@libsql/client": "^0.14.0",
+    "postgres": "^3.4.5",
     "recharts": "^2.13.0",
     "@radix-ui/react-dialog": "^1.1.0",
     "@radix-ui/react-label": "^2.1.0",

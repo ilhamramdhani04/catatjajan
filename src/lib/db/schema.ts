@@ -1,35 +1,40 @@
-import { sqliteTable, text, integer, real } from "drizzle-orm/sqlite-core";
+import {
+  pgTable,
+  text,
+  timestamp,
+  boolean,
+  integer,
+  real,
+} from "drizzle-orm/pg-core";
 import { relations } from "drizzle-orm";
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Better Auth core tables (nama & kolom harus PERSIS — jangan diubah)
 // ─────────────────────────────────────────────────────────────────────────────
 
-export const users = sqliteTable("user", {
+export const users = pgTable("user", {
   id: text("id").primaryKey(),
   name: text("name").notNull(),
   email: text("email").notNull().unique(),
-  emailVerified: integer("email_verified", { mode: "boolean" })
-    .notNull()
-    .default(false),
+  emailVerified: boolean("email_verified").notNull().default(false),
   image: text("image"),
-  createdAt: integer("created_at", { mode: "timestamp" }).notNull(),
-  updatedAt: integer("updated_at", { mode: "timestamp" }).notNull(),
+  createdAt: timestamp("created_at").notNull(),
+  updatedAt: timestamp("updated_at").notNull(),
 
   // ── Extension: data keluarga ──────────────────────────────────────────────
   familyId: text("family_id").references(() => families.id, {
     onDelete: "set null",
   }),
   waNumber: text("wa_number").unique(), // format: "628xxxxxxxxxx"
-  role: text("role", { enum: ["admin", "member"] }).notNull().default("member"),
+  role: text("role").notNull().default("member"),
 });
 
-export const sessions = sqliteTable("session", {
+export const sessions = pgTable("session", {
   id: text("id").primaryKey(),
-  expiresAt: integer("expires_at", { mode: "timestamp" }).notNull(),
+  expiresAt: timestamp("expires_at").notNull(),
   token: text("token").notNull().unique(),
-  createdAt: integer("created_at", { mode: "timestamp" }).notNull(),
-  updatedAt: integer("updated_at", { mode: "timestamp" }).notNull(),
+  createdAt: timestamp("created_at").notNull(),
+  updatedAt: timestamp("updated_at").notNull(),
   ipAddress: text("ip_address"),
   userAgent: text("user_agent"),
   userId: text("user_id")
@@ -37,7 +42,7 @@ export const sessions = sqliteTable("session", {
     .references(() => users.id, { onDelete: "cascade" }),
 });
 
-export const accounts = sqliteTable("account", {
+export const accounts = pgTable("account", {
   id: text("id").primaryKey(),
   accountId: text("account_id").notNull(),
   providerId: text("provider_id").notNull(),
@@ -47,56 +52,49 @@ export const accounts = sqliteTable("account", {
   accessToken: text("access_token"),
   refreshToken: text("refresh_token"),
   idToken: text("id_token"),
-  accessTokenExpiresAt: integer("access_token_expires_at", {
-    mode: "timestamp",
-  }),
-  refreshTokenExpiresAt: integer("refresh_token_expires_at", {
-    mode: "timestamp",
-  }),
+  accessTokenExpiresAt: timestamp("access_token_expires_at"),
+  refreshTokenExpiresAt: timestamp("refresh_token_expires_at"),
   scope: text("scope"),
   password: text("password"),
-  createdAt: integer("created_at", { mode: "timestamp" }).notNull(),
-  updatedAt: integer("updated_at", { mode: "timestamp" }).notNull(),
+  createdAt: timestamp("created_at").notNull(),
+  updatedAt: timestamp("updated_at").notNull(),
 });
 
-export const verifications = sqliteTable("verification", {
+export const verifications = pgTable("verification", {
   id: text("id").primaryKey(),
   identifier: text("identifier").notNull(),
   value: text("value").notNull(),
-  expiresAt: integer("expires_at", { mode: "timestamp" }).notNull(),
-  createdAt: integer("created_at", { mode: "timestamp" }),
-  updatedAt: integer("updated_at", { mode: "timestamp" }),
+  expiresAt: timestamp("expires_at").notNull(),
+  createdAt: timestamp("created_at"),
+  updatedAt: timestamp("updated_at"),
 });
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Domain Tables
 // ─────────────────────────────────────────────────────────────────────────────
 
-export const families = sqliteTable("family", {
+export const families = pgTable("family", {
   id: text("id")
     .primaryKey()
     .$defaultFn(() => crypto.randomUUID()),
   name: text("name").notNull(),
-  createdAt: integer("created_at", { mode: "timestamp" })
-    .notNull()
-    .$defaultFn(() => new Date()),
+  createdAt: timestamp("created_at").notNull().defaultNow(),
 });
 
-export const categories = sqliteTable("category", {
+export const categories = pgTable("category", {
   id: text("id")
     .primaryKey()
     .$defaultFn(() => crypto.randomUUID()),
   familyId: text("family_id")
     .notNull()
     .references(() => families.id, { onDelete: "cascade" }),
-  name: text("name").notNull(),                 // "Makan", "Jajan", dll
-  icon: text("icon").default("💰"),             // emoji icon opsional
-  isDefault: integer("is_default", { mode: "boolean" }).notNull().default(false),
-  // Budget bulanan opsional untuk fitur notifikasi overspending
+  name: text("name").notNull(),
+  icon: text("icon").default("💰"),
+  isDefault: boolean("is_default").notNull().default(false),
   monthlyBudget: real("monthly_budget"),
 });
 
-export const transactions = sqliteTable("transaction", {
+export const transactions = pgTable("transaction", {
   id: text("id")
     .primaryKey()
     .$defaultFn(() => crypto.randomUUID()),
@@ -109,17 +107,13 @@ export const transactions = sqliteTable("transaction", {
   categoryId: text("category_id")
     .notNull()
     .references(() => categories.id),
-  amount: integer("amount").notNull(),           // dalam Rupiah
+  amount: integer("amount").notNull(),
   note: text("note"),
-  source: text("source", { enum: ["whatsapp", "web"] })
-    .notNull()
-    .default("web"),
-  createdAt: integer("created_at", { mode: "timestamp" })
-    .notNull()
-    .$defaultFn(() => new Date()),
+  source: text("source").notNull().default("web"),
+  createdAt: timestamp("created_at").notNull().defaultNow(),
 });
 
-export const pushSubscriptions = sqliteTable("push_subscription", {
+export const pushSubscriptions = pgTable("push_subscription", {
   id: text("id")
     .primaryKey()
     .$defaultFn(() => crypto.randomUUID()),
@@ -129,13 +123,11 @@ export const pushSubscriptions = sqliteTable("push_subscription", {
   endpoint: text("endpoint").notNull().unique(),
   p256dh: text("p256dh").notNull(),
   auth: text("auth").notNull(),
-  createdAt: integer("created_at", { mode: "timestamp" })
-    .notNull()
-    .$defaultFn(() => new Date()),
+  createdAt: timestamp("created_at").notNull().defaultNow(),
 });
 
 // ─────────────────────────────────────────────────────────────────────────────
-// Relations (untuk query dengan drizzle relational API)
+// Relations
 // ─────────────────────────────────────────────────────────────────────────────
 
 export const familiesRelations = relations(families, ({ many }) => ({

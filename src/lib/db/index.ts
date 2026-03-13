@@ -1,13 +1,13 @@
-import { createClient } from "@libsql/client";
-import { drizzle } from "drizzle-orm/libsql";
+import postgres from "postgres";
+import { drizzle } from "drizzle-orm/postgres-js";
 import * as schema from "./schema";
 
 function createDb() {
-  const client = createClient({
-    // Format lokal : "file:./local.db"
-    // Format Turso  : "libsql://<db-name>-<org>.turso.io"
-    url: process.env.DATABASE_URL ?? "file:./local.db",
-    authToken: process.env.DATABASE_AUTH_TOKEN, // undefined saat dev lokal, aman
+  const client = postgres(process.env.DATABASE_URL!, {
+    // Wajib untuk Supabase transaction mode pooler (port 6543)
+    prepare: false,
+    // Batasi koneksi di lingkungan serverless
+    max: 1,
   });
 
   return drizzle(client, { schema });

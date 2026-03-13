@@ -3,14 +3,11 @@
  * Hanya untuk development/testing — jangan dijalankan di production.
  */
 import "dotenv/config";
-import { createClient } from "@libsql/client";
-import { drizzle } from "drizzle-orm/libsql";
+import postgres from "postgres";
+import { drizzle } from "drizzle-orm/postgres-js";
 import * as schema from "./db/schema";
 
-const client = createClient({
-  url: process.env.DATABASE_URL ?? "file:./local.db",
-  authToken: process.env.DATABASE_AUTH_TOKEN,
-});
+const client = postgres(process.env.DATABASE_URL!, { prepare: false, max: 1 });
 const db = drizzle(client, { schema });
 
 async function seed() {

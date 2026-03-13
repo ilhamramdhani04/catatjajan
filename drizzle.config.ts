@@ -3,9 +3,10 @@ import { defineConfig } from "drizzle-kit";
 export default defineConfig({
   schema: "./src/lib/db/schema.ts",
   out: "./drizzle",
-  dialect: "turso",
+  dialect: "postgresql",
   dbCredentials: {
-    url: process.env.DATABASE_URL ?? "file:./local.db",
-    authToken: process.env.DATABASE_AUTH_TOKEN,
+    // Untuk migrasi: gunakan DIRECT_URL (koneksi langsung, bukan pooler)
+    // Untuk runtime: DATABASE_URL bisa pakai pooler (port 6543)
+    url: process.env.DIRECT_URL ?? process.env.DATABASE_URL!,
   },
 });
