@@ -57,8 +57,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Invalid JSON" }, { status: 400 });
   }
 
-  // Meta mengharapkan respons 200 segera, proses async di background
-  void processMessages(body);
+  await processMessages(body);
 
   return NextResponse.json({ status: "ok" }, { status: 200 });
 }

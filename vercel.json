@@ -1,5 +1,10 @@
 {
   "regions": ["sin1"],
+  "functions": {
+    "src/app/api/webhook/whatsapp/route.ts": {
+      "maxDuration": 30
+    }
+  },
   "crons": [
     {
       "path": "/api/cron?action=weekly-report",
