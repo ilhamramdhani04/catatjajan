@@ -4,10 +4,9 @@ import * as schema from "./schema";
 
 function createDb() {
   const client = postgres(process.env.DATABASE_URL!, {
-    // Wajib untuk Supabase transaction mode pooler (port 6543)
     prepare: false,
-    // Batasi koneksi di lingkungan serverless
     max: 1,
+    connect_timeout: 10,
   });
 
   return drizzle(client, { schema });
@@ -21,7 +20,5 @@ declare global {
 }
 
 export const db: DrizzleDB = globalThis.__db ?? createDb();
+globalThis.__db = db;
 
-if (process.env.NODE_ENV !== "production") {
-  globalThis.__db = db;
-}
