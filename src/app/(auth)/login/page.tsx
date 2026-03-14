@@ -26,79 +26,65 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen mesh-bg flex items-center justify-center px-4 relative overflow-hidden">
-      {/* Background orbs */}
-      <div className="orb w-96 h-96 bg-purple-600 top-[-100px] left-[-80px] animate-blob" />
-      <div className="orb w-80 h-80 bg-pink-600 bottom-[-60px] right-[-60px] animate-blob2" />
-      <div className="orb w-64 h-64 bg-orange-500 top-1/2 right-10 animate-float2" />
+    <div className="min-h-screen flex items-center justify-center px-4 relative overflow-hidden"
+      style={{ background: "var(--black)" }}>
 
-      {/* Floating shapes */}
-      <div className="absolute top-20 left-10 w-12 h-12 rounded-2xl card-purple animate-float opacity-60" />
-      <div className="absolute top-40 right-20 w-8 h-8 rounded-xl card-pink animate-float3 opacity-50" />
-      <div className="absolute bottom-32 left-20 w-10 h-10 rounded-full card-teal animate-float2 opacity-50" />
+      <div className="bg-glow w-[500px] h-[500px]"
+        style={{ top: "-120px", right: "-100px", background: "rgba(212,180,131,0.05)" }} />
+      <div className="bg-glow w-[300px] h-[300px]"
+        style={{ bottom: "-60px", left: "-60px", background: "rgba(212,180,131,0.04)" }} />
 
-      <div className="relative z-10 w-full max-w-sm animate-slide-up">
-        <div className="glass rounded-3xl p-8 shadow-2xl" style={{ boxShadow: "0 25px 60px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.08)" }}>
-          <div className="text-center mb-8">
-            <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl gradient-btn mb-4">
-              <span className="text-2xl">💰</span>
+      <div className="relative z-10 w-full max-w-sm">
+        <div className="text-center mb-8 anim-fade-up">
+          <div className="inline-flex flex-col items-center gap-3">
+            <div className="w-12 h-12 rounded-2xl flex items-center justify-center text-xl"
+              style={{ background: "rgba(212,180,131,0.1)", border: "1px solid var(--gold-border)" }}>
+              ◈
             </div>
-            <h1 className="text-2xl font-bold gradient-text">CatatJajan</h1>
-            <p className="text-sm text-white/40 mt-1">Masuk ke akun kamu</p>
+            <div className="text-xs tracking-[0.28em] uppercase" style={{ color: "var(--gold-dim)" }}>CatatJajan</div>
           </div>
+        </div>
+
+        <div className="noir-card-solid p-8 anim-fade-up d-2">
+          <h2 className="text-xl font-semibold mb-1" style={{ color: "var(--cream)", letterSpacing: "-0.02em" }}>
+            Selamat datang kembali
+          </h2>
+          <p className="text-sm mb-7" style={{ color: "var(--cream-dim)" }}>
+            Masuk untuk melihat catatan pengeluaran
+          </p>
 
           {error && (
-            <div className="mb-4 px-4 py-3 rounded-xl bg-red-500/10 border border-red-500/30 text-red-400 text-sm animate-scale-in">
-              ⚠️ {error}
+            <div className="anim-scale-in mb-5 px-4 py-3 rounded-xl text-sm"
+              style={{ background: "rgba(224,96,96,0.08)", border: "1px solid rgba(224,96,96,0.2)", color: "var(--red)" }}>
+              {error}
             </div>
           )}
 
-          <form onSubmit={handleSubmit} className="space-y-4">
+          <form onSubmit={handleSubmit} className="space-y-5">
             <div>
-              <label className="block text-xs font-medium text-white/50 mb-2 uppercase tracking-wider">Email</label>
-              <input
-                type="email"
-                required
-                autoComplete="email"
-                placeholder="nama@email.com"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                className="dark-input"
-              />
+              <label className="label-xs block mb-3">Email</label>
+              <input type="email" required autoComplete="email" placeholder="nama@email.com"
+                value={email} onChange={(e) => setEmail(e.target.value)} className="noir-input" />
             </div>
             <div>
-              <label className="block text-xs font-medium text-white/50 mb-2 uppercase tracking-wider">Password</label>
-              <input
-                type="password"
-                required
-                autoComplete="current-password"
-                placeholder="••••••••"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                className="dark-input"
-              />
+              <label className="label-xs block mb-3">Password</label>
+              <input type="password" required autoComplete="current-password" placeholder="••••••••"
+                value={password} onChange={(e) => setPassword(e.target.value)} className="noir-input" />
             </div>
-            <button
-              type="submit"
-              disabled={loading}
-              className="gradient-btn w-full py-3 rounded-xl text-white font-semibold text-sm mt-2"
-            >
-              {loading ? (
-                <span className="flex items-center justify-center gap-2">
-                  <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin inline-block" />
-                  Masuk...
-                </span>
-              ) : "Masuk →"}
-            </button>
+            <div className="pt-2">
+              <button type="submit" disabled={loading} className="btn-gold">
+                {loading
+                  ? <><span className="w-4 h-4 rounded-full border-2 border-black/30 border-t-black anim-spin" />Masuk...</>
+                  : "Masuk"}
+              </button>
+            </div>
           </form>
-
-          <p className="text-center text-sm text-white/30 mt-6">
-            Belum punya akun?{" "}
-            <Link href="/register" className="text-purple-400 hover:text-purple-300 font-medium transition-colors">
-              Daftar sekarang
-            </Link>
-          </p>
         </div>
+
+        <p className="text-center text-sm mt-6 anim-fade-up d-3" style={{ color: "var(--cream-faint)" }}>
+          Belum punya akun?{" "}
+          <Link href="/register" style={{ color: "var(--gold)" }}>Daftar sekarang</Link>
+        </p>
       </div>
     </div>
   );

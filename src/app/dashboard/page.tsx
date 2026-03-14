@@ -63,7 +63,7 @@ export default async function DashboardPage() {
           acc[catId] = {
             categoryId: catId,
             name: t.category.name,
-            icon: t.category.icon ?? "💰",
+            icon: t.category.icon ?? "ð°",
             total: 0,
           };
         }
@@ -87,21 +87,25 @@ export default async function DashboardPage() {
 
 function NeedFamilySetup() {
   return (
-    <div className="flex flex-col items-center justify-center min-h-[60vh] gap-5 text-center animate-slide-up">
-      <div className="w-20 h-20 rounded-3xl gradient-btn flex items-center justify-center text-4xl shadow-glow">
-        🏠
+    <div className="flex flex-col items-center justify-center min-h-[60vh] gap-6 text-center anim-fade-up">
+      <div className="w-16 h-16 rounded-2xl flex items-center justify-center text-2xl"
+        style={{ background: "rgba(212,180,131,0.1)", border: "1px solid var(--gold-border)", color: "var(--gold)" }}>
+        â
       </div>
       <div>
-        <h2 className="text-xl font-bold gradient-text">Belum ada grup keluarga</h2>
-        <p className="text-sm text-white/40 mt-2 max-w-xs">
+        <h2 className="text-xl font-semibold" style={{ color: "var(--cream)", letterSpacing: "-0.02em" }}>
+          Belum ada grup keluarga
+        </h2>
+        <p className="text-sm mt-2 max-w-xs" style={{ color: "var(--cream-dim)" }}>
           Buat grup keluarga atau minta admin untuk menambahkanmu.
         </p>
       </div>
       <a
         href="/dashboard/setup"
-        className="gradient-btn px-6 py-2.5 rounded-xl text-white text-sm font-semibold"
+        className="btn-gold"
+        style={{ width: "auto", padding: "10px 24px" }}
       >
-        Buat Grup Keluarga →
+        Buat Grup Keluarga
       </a>
     </div>
   );

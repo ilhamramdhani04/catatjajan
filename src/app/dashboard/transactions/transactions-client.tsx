@@ -44,29 +44,34 @@ export default function TransactionsClient({ transactions: initialTxs, categorie
   return (
     <div className="space-y-5">
       {/* Header */}
-      <div className="flex items-center justify-between animate-slide-up">
+      <div className="flex items-center justify-between anim-fade-up">
         <div>
-          <h1 className="text-2xl font-bold gradient-text">Transaksi</h1>
-          <p className="text-sm text-white/30 mt-0.5">Riwayat pengeluaran kamu</p>
+          <h1 className="text-2xl font-bold" style={{ color: "var(--cream)", letterSpacing: "-0.03em" }}>Transaksi</h1>
+          <p className="text-xs mt-1" style={{ color: "var(--gold-dim)" }}>Riwayat pengeluaran keluarga</p>
         </div>
         <button
           onClick={() => setShowForm(true)}
-          className="gradient-btn px-4 py-2 rounded-xl text-white text-sm font-semibold flex items-center gap-1.5"
+          className="btn-gold"
+          style={{ width: "auto", padding: "9px 18px", fontSize: "12px" }}
         >
-          <span>+</span> Tambah
+          + Tambah
         </button>
       </div>
 
       {/* Period toggle */}
-      <div className="flex gap-1 p-1 rounded-2xl w-fit glass animate-slide-up" style={{ animationDelay: "0.1s" }}>
+      <div className="flex gap-1 p-1 rounded-xl w-fit anim-fade-up d-1"
+        style={{ background: "var(--black-2)", border: "1px solid var(--gold-border)" }}>
         {[{ key: "weekly", label: "Minggu Ini" }, { key: "monthly", label: "Bulan Ini" }].map(({ key, label }) => (
           <button
             key={key}
             onClick={() => switchPeriod(key)}
             disabled={isPending}
-            className={`px-4 py-2 text-sm font-medium rounded-xl transition-all ${
-              period === key ? "gradient-btn text-white" : "text-white/40 hover:text-white/70"
+            className={`px-4 py-2 text-xs font-semibold rounded-lg transition-all ${
+              period === key
+                ? "btn-gold"
+                : ""
             }`}
+            style={period === key ? { width: "auto", padding: "7px 16px", fontSize: "11px" } : { color: "var(--cream-dim)" }}
           >
             {label}
           </button>
@@ -74,13 +79,10 @@ export default function TransactionsClient({ transactions: initialTxs, categorie
       </div>
 
       {/* Total card */}
-      <div className="card-purple rounded-2xl p-5 relative overflow-hidden animate-slide-up" style={{ animationDelay: "0.15s" }}>
-        <div className="orb w-32 h-32 bg-purple-600 top-[-20px] right-[-20px]" style={{ filter: "blur(40px)", opacity: 0.25 }} />
-        <p className="text-xs font-semibold text-purple-300/60 uppercase tracking-widest">
-          Total {period === "weekly" ? "Minggu Ini" : "Bulan Ini"}
-        </p>
-        <p className="text-4xl font-bold text-white mt-2">{formatRupiah(total)}</p>
-        <p className="text-sm text-white/30 mt-1">{txs.length} transaksi</p>
+      <div className="noir-card-solid p-5 anim-fade-up d-2">
+        <p className="label-xs mb-2">Total {period === "weekly" ? "Minggu Ini" : "Bulan Ini"}</p>
+        <p className="text-4xl font-bold" style={{ color: "var(--cream)", letterSpacing: "-0.04em" }}>{formatRupiah(total)}</p>
+        <p className="text-xs mt-2" style={{ color: "var(--gold-dim)" }}>{txs.length} transaksi</p>
       </div>
 
       {/* Modal */}
@@ -93,44 +95,48 @@ export default function TransactionsClient({ transactions: initialTxs, categorie
       )}
 
       {/* List */}
-      <div className="glass rounded-2xl overflow-hidden animate-slide-up" style={{ animationDelay: "0.2s" }}>
+      <div className="noir-card-solid overflow-hidden anim-fade-up d-3">
         {txs.length === 0 ? (
           <div className="text-center py-14">
-            <p className="text-4xl mb-3">📭</p>
-            <p className="text-sm text-white/30">Belum ada transaksi di periode ini</p>
+            <p className="text-3xl mb-3" style={{ opacity: 0.3 }}>◈</p>
+            <p className="text-sm" style={{ color: "var(--cream-faint)" }}>Belum ada transaksi di periode ini</p>
           </div>
         ) : (
           <ul ref={listRef}>
-            {txs.map((t, i) => (
+            {txs.map((t) => (
               <li
                 key={t.id}
-                className="flex items-center justify-between gap-3 px-4 py-3.5 border-b last:border-0 hover:bg-white/3 transition-colors group"
-                style={{ borderColor: "rgba(255,255,255,0.05)" }}
+                className="flex items-center justify-between gap-3 px-4 py-3.5 row-div group transition-colors"
+                onMouseEnter={(e) => (e.currentTarget as HTMLLIElement).style.background = "var(--gold-glow)"}
+                onMouseLeave={(e) => (e.currentTarget as HTMLLIElement).style.background = "transparent"}
               >
                 <div className="flex items-center gap-3 min-w-0">
                   <div
-                    className="w-10 h-10 rounded-xl flex items-center justify-center text-lg shrink-0 group-hover:scale-110 transition-transform"
-                    style={{ background: ["rgba(124,58,237,0.2)","rgba(219,39,119,0.2)","rgba(249,115,22,0.2)","rgba(20,184,166,0.2)","rgba(37,99,235,0.2)"][i % 5] }}
+                    className="w-10 h-10 rounded-xl flex items-center justify-center text-lg shrink-0 transition-transform group-hover:scale-110"
+                    style={{ background: "rgba(212,180,131,0.08)", border: "1px solid var(--gold-border)" }}
                   >
-                    {t.category.icon ?? "💰"}
+                    {t.category.icon ?? "◈"}
                   </div>
                   <div className="min-w-0">
-                    <p className="text-sm font-medium text-white/90 truncate">
+                    <p className="text-sm font-medium truncate" style={{ color: "var(--cream)" }}>
                       {t.category.name}
-                      {t.note && <span className="text-white/35 font-normal"> · {t.note}</span>}
+                      {t.note && <span className="font-normal ml-1" style={{ color: "var(--cream-faint)" }}>· {t.note}</span>}
                     </p>
-                    <p className="text-xs text-white/30 mt-0.5">
+                    <p className="text-xs mt-0.5" style={{ color: "var(--gold-dim)" }}>
                       {t.user.name} · {new Date(t.createdAt).toLocaleDateString("id-ID", { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" })}
-                      {t.source === "whatsapp" && <span className="ml-1 text-green-400/70">· WA</span>}
+                      {t.source === "whatsapp" && <span className="ml-1" style={{ color: "var(--green)" }}>· WA</span>}
                     </p>
                   </div>
                 </div>
                 <div className="flex items-center gap-3 shrink-0">
-                  <span className="text-sm font-bold text-white/85">{formatRupiah(t.amount)}</span>
+                  <span className="text-sm font-bold" style={{ color: "var(--gold)" }}>{formatRupiah(t.amount)}</span>
                   <button
                     onClick={() => handleDelete(t.id)}
                     disabled={deletingId === t.id}
-                    className="text-xs text-red-500/60 hover:text-red-400 disabled:opacity-30 px-2 py-1 rounded-lg hover:bg-red-500/10 transition-all"
+                    className="text-xs disabled:opacity-30 px-2 py-1 rounded-lg transition-all"
+                    style={{ color: "rgba(224,96,96,0.5)" }}
+                    onMouseEnter={(e) => { (e.currentTarget as HTMLButtonElement).style.color = "var(--red)"; (e.currentTarget as HTMLButtonElement).style.background = "rgba(224,96,96,0.08)"; }}
+                    onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.color = "rgba(224,96,96,0.5)"; (e.currentTarget as HTMLButtonElement).style.background = "transparent"; }}
                   >
                     {deletingId === t.id ? "..." : "Hapus"}
                   </button>
@@ -156,7 +162,7 @@ function AddTransactionForm({ categories, onClose, onAdded }: { categories: Cate
 
   useEffect(() => {
     if (modalRef.current) {
-      gsap.fromTo(modalRef.current, { opacity: 0, scale: 0.92, y: 30 }, { opacity: 1, scale: 1, y: 0, duration: 0.3, ease: "back.out(1.4)" });
+      gsap.fromTo(modalRef.current, { opacity: 0, scale: 0.93, y: 28 }, { opacity: 1, scale: 1, y: 0, duration: 0.32, ease: "back.out(1.4)" });
     }
   }, []);
 
@@ -185,43 +191,48 @@ function AddTransactionForm({ categories, onClose, onAdded }: { categories: Cate
   return (
     <div
       className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-4"
-      style={{ background: "rgba(0,0,0,0.7)", backdropFilter: "blur(8px)" }}
+      style={{ background: "rgba(0,0,0,0.8)", backdropFilter: "blur(10px)" }}
       onClick={(e) => e.target === e.currentTarget && onClose()}
     >
-      <div ref={modalRef} className="w-full max-w-md rounded-3xl p-6 space-y-4" style={{ background: "#0e0e1c", border: "1px solid rgba(255,255,255,0.1)", opacity: 0 }}>
+      <div ref={modalRef} className="w-full max-w-md rounded-2xl p-6 space-y-5"
+        style={{ background: "var(--black-2)", border: "1px solid var(--gold-border)", opacity: 0, boxShadow: "0 32px 64px rgba(0,0,0,0.6)" }}>
         <div className="flex items-center justify-between">
           <div>
-            <h2 className="text-lg font-bold text-white">Tambah Transaksi</h2>
-            <p className="text-xs text-white/30 mt-0.5">Catat pengeluaran baru</p>
+            <h2 className="text-lg font-semibold" style={{ color: "var(--cream)" }}>Tambah Transaksi</h2>
+            <p className="label-xs mt-0.5">Catat pengeluaran baru</p>
           </div>
-          <button onClick={onClose} className="w-8 h-8 rounded-xl glass flex items-center justify-center text-white/50 hover:text-white transition-colors text-xl">×</button>
+          <button onClick={onClose} className="w-8 h-8 rounded-xl flex items-center justify-center text-xl transition-colors"
+            style={{ color: "var(--cream-dim)", border: "1px solid var(--gold-border)" }}>×</button>
         </div>
 
-        {error && <div className="px-4 py-2.5 rounded-xl bg-red-500/10 border border-red-500/25 text-red-400 text-sm">{error}</div>}
+        {error && (
+          <div className="px-4 py-2.5 rounded-xl text-sm"
+            style={{ background: "rgba(224,96,96,0.08)", border: "1px solid rgba(224,96,96,0.2)", color: "var(--red)" }}>
+            {error}
+          </div>
+        )}
 
-        <form onSubmit={handleSubmit} className="space-y-3">
+        <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="block text-xs font-medium text-white/40 mb-1.5 uppercase tracking-wider">Kategori</label>
-            <select value={categoryId} onChange={(e) => setCategoryId(e.target.value)} className="dark-input">
-              {categories.map((c) => <option key={c.id} value={c.id} style={{ background: "#0e0e1c" }}>{c.icon} {c.name}</option>)}
+            <label className="label-xs block mb-2.5">Kategori</label>
+            <select value={categoryId} onChange={(e) => setCategoryId(e.target.value)} className="noir-input-box">
+              {categories.map((c) => <option key={c.id} value={c.id} style={{ background: "var(--black-2)" }}>{c.icon} {c.name}</option>)}
             </select>
           </div>
           <div>
-            <label className="block text-xs font-medium text-white/40 mb-1.5 uppercase tracking-wider">Jumlah (Rp)</label>
-            <input type="text" required inputMode="numeric" placeholder="50000" value={amount} onChange={(e) => setAmount(e.target.value)} className="dark-input" />
+            <label className="label-xs block mb-2.5">Jumlah (Rp)</label>
+            <input type="text" required inputMode="numeric" placeholder="50000"
+              value={amount} onChange={(e) => setAmount(e.target.value)} className="noir-input-box" />
           </div>
           <div>
-            <label className="block text-xs font-medium text-white/40 mb-1.5 uppercase tracking-wider">
-              Keterangan <span className="text-white/20 normal-case">(opsional)</span>
-            </label>
-            <input type="text" placeholder="nasi padang, kopi, dll" value={note} onChange={(e) => setNote(e.target.value)} className="dark-input" />
+            <label className="label-xs block mb-2.5">Keterangan <span style={{ color: "var(--cream-faint)", textTransform: "none", letterSpacing: 0 }}>(opsional)</span></label>
+            <input type="text" placeholder="nasi padang, kopi, dll"
+              value={note} onChange={(e) => setNote(e.target.value)} className="noir-input-box" />
           </div>
           <div className="flex gap-2 pt-1">
-            <button type="button" onClick={onClose} className="flex-1 py-2.5 rounded-xl glass text-white/60 hover:text-white text-sm font-medium transition-all">Batal</button>
-            <button type="submit" disabled={loading} className="flex-1 gradient-btn py-2.5 rounded-xl text-white text-sm font-semibold">
-              {loading
-                ? <span className="flex items-center justify-center gap-2"><span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin inline-block" />Menyimpan...</span>
-                : "Simpan"}
+            <button type="button" onClick={onClose} className="btn-ghost flex-1">Batal</button>
+            <button type="submit" disabled={loading} className="btn-gold flex-1" style={{ flex: 1 }}>
+              {loading ? "Menyimpan..." : "Simpan"}
             </button>
           </div>
         </form>

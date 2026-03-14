@@ -8,8 +8,6 @@ interface Category { id: string; name: string; icon: string | null; isDefault: b
 interface Props { isAdmin: boolean; currentUserId: string; members: Member[]; categories: Category[]; }
 type ActiveTab = "members" | "budget";
 
-const AVATAR_COLORS = ["from-purple-500 to-pink-500","from-orange-400 to-pink-400","from-teal-400 to-blue-500","from-pink-500 to-rose-500","from-violet-500 to-indigo-500"];
-
 export default function SettingsClient({ isAdmin, currentUserId, members: initialMembers, categories: initialCategories }: Props) {
   const router = useRouter();
   const [tab, setTab] = useState<ActiveTab>("members");
@@ -18,27 +16,29 @@ export default function SettingsClient({ isAdmin, currentUserId, members: initia
 
   return (
     <div className="space-y-6">
-      <div className="animate-slide-up">
-        <h1 className="text-2xl font-bold gradient-text">Pengaturan</h1>
-        <p className="text-sm text-white/30 mt-1">Kelola keluarga dan anggaran kamu</p>
+      <div className="anim-fade-up">
+        <h1 className="text-2xl font-bold" style={{ color: "var(--cream)", letterSpacing: "-0.03em" }}>Pengaturan</h1>
+        <p className="text-xs mt-1" style={{ color: "var(--gold-dim)" }}>Kelola keluarga dan anggaran</p>
       </div>
 
       {/* Tab switcher */}
-      <div className="flex gap-1 p-1 rounded-2xl w-fit glass animate-slide-up" style={{ animationDelay: "0.1s" }}>
-        {([["members", "👥 Anggota"], ["budget", "💎 Budget"]] as [ActiveTab, string][]).map(([t, label]) => (
+      <div className="flex gap-1 p-1 rounded-xl w-fit anim-fade-up d-1"
+        style={{ background: "var(--black-2)", border: "1px solid var(--gold-border)" }}>
+        {([["members", "Anggota"], ["budget", "Budget"]] as [ActiveTab, string][]).map(([t, label]) => (
           <button
             key={t}
             onClick={() => setTab(t)}
-            className={`px-5 py-2 text-sm font-medium rounded-xl transition-all ${
-              tab === t ? "gradient-btn text-white shadow-glow" : "text-white/40 hover:text-white/70"
-            }`}
+            className="px-5 py-2 text-xs font-semibold rounded-lg transition-all"
+            style={tab === t
+              ? { background: "linear-gradient(135deg,#C8A45A,#E8C87A,#C8A45A)", color: "#08070F" }
+              : { color: "var(--cream-dim)" }}
           >
             {label}
           </button>
         ))}
       </div>
 
-      <div className="animate-slide-up" style={{ animationDelay: "0.15s" }}>
+      <div className="anim-fade-up d-2">
         {tab === "members" && <MembersTab isAdmin={isAdmin} currentUserId={currentUserId} members={members} onMembersChange={setMembers} onRefresh={() => router.refresh()} />}
         {tab === "budget" && <BudgetTab isAdmin={isAdmin} categories={categories} onCategoriesChange={setCategories} />}
       </div>
@@ -76,26 +76,36 @@ function MembersTab({ isAdmin, currentUserId, members, onMembersChange, onRefres
 
   return (
     <div className="space-y-3">
-      {/* Members grid */}
-      <div className="grid gap-3">
+      <div className="noir-card-solid overflow-hidden">
         {members.map((m, i) => (
-          <div key={m.id} className="glass rounded-2xl p-4 flex items-center justify-between hover:bg-white/5 transition-colors">
+          <div key={m.id} className="flex items-center justify-between gap-3 px-4 py-3.5 row-div transition-colors"
+            onMouseEnter={(e) => (e.currentTarget as HTMLDivElement).style.background = "var(--gold-glow)"}
+            onMouseLeave={(e) => (e.currentTarget as HTMLDivElement).style.background = "transparent"}
+          >
             <div className="flex items-center gap-3">
-              <div className={`w-10 h-10 rounded-2xl bg-gradient-to-br ${AVATAR_COLORS[i % AVATAR_COLORS.length]} flex items-center justify-center text-white font-bold text-sm shrink-0`}>
+              <div className="w-9 h-9 rounded-xl flex items-center justify-center text-sm font-bold shrink-0"
+                style={{ background: "rgba(212,180,131,0.1)", border: "1px solid var(--gold-border)", color: "var(--gold)" }}>
                 {m.name.charAt(0).toUpperCase()}
               </div>
               <div>
-                <div className="flex items-center gap-2">
-                  <p className="text-sm font-semibold text-white/90">{m.name}</p>
-                  {m.id === currentUserId && <span className="text-xs px-2 py-0.5 rounded-full bg-purple-500/20 text-purple-300 border border-purple-500/25">Kamu</span>}
-                  {m.role === "admin" && <span className="text-xs px-2 py-0.5 rounded-full bg-orange-500/20 text-orange-300 border border-orange-500/25">Admin</span>}
+                <div className="flex items-center gap-2 flex-wrap">
+                  <p className="text-sm font-medium" style={{ color: "var(--cream)" }}>{m.name}</p>
+                  {m.id === currentUserId && (
+                    <span className="badge badge-gold">Kamu</span>
+                  )}
+                  {m.role === "admin" && (
+                    <span className="badge" style={{ background: "rgba(212,180,131,0.12)", color: "var(--gold-bright)", border: "1px solid var(--gold-border)" }}>Admin</span>
+                  )}
                 </div>
-                <p className="text-xs text-white/30 mt-0.5">{m.waNumber ?? "Belum ada nomor WA"}</p>
+                <p className="text-xs mt-0.5" style={{ color: "var(--gold-dim)" }}>{m.waNumber ?? "Belum ada nomor WA"}</p>
               </div>
             </div>
             {isAdmin && m.id !== currentUserId && (
               <button onClick={() => handleRemove(m.id)} disabled={removingId === m.id}
-                className="text-xs text-red-500/60 hover:text-red-400 disabled:opacity-30 px-2.5 py-1.5 rounded-xl hover:bg-red-500/10 transition-all">
+                className="text-xs disabled:opacity-30 px-2.5 py-1.5 rounded-lg transition-all"
+                style={{ color: "rgba(224,96,96,0.5)" }}
+                onMouseEnter={(e) => { (e.currentTarget as HTMLButtonElement).style.color = "var(--red)"; (e.currentTarget as HTMLButtonElement).style.background = "rgba(224,96,96,0.08)"; }}
+                onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.color = "rgba(224,96,96,0.5)"; (e.currentTarget as HTMLButtonElement).style.background = "transparent"; }}>
                 {removingId === m.id ? "..." : "Hapus"}
               </button>
             )}
@@ -103,31 +113,40 @@ function MembersTab({ isAdmin, currentUserId, members, onMembersChange, onRefres
         ))}
       </div>
 
-      {/* Add member */}
       {isAdmin && (
         <div>
           {!showForm ? (
-            <button onClick={() => setShowForm(true)} className="w-full glass rounded-2xl p-4 text-sm text-white/40 hover:text-white/70 border border-dashed hover:border-white/20 transition-all text-center">
+            <button onClick={() => setShowForm(true)}
+              className="w-full py-3.5 rounded-xl text-xs font-medium transition-all text-center"
+              style={{ border: "1px dashed var(--gold-border)", color: "var(--gold-dim)", background: "transparent" }}
+              onMouseEnter={(e) => { (e.currentTarget as HTMLButtonElement).style.color = "var(--gold)"; (e.currentTarget as HTMLButtonElement).style.background = "var(--gold-glow)"; }}
+              onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.color = "var(--gold-dim)"; (e.currentTarget as HTMLButtonElement).style.background = "transparent"; }}
+            >
               + Tambah Anggota
             </button>
           ) : (
-            <div className="glass rounded-2xl p-5 space-y-3 border border-purple-500/20">
-              <h3 className="text-sm font-semibold text-white/70">Tambah Anggota Baru</h3>
-              {error && <div className="text-sm text-red-400 bg-red-500/10 px-3 py-2 rounded-xl border border-red-500/25">{error}</div>}
+            <div className="noir-card-solid p-5 space-y-4">
+              <h3 className="text-sm font-semibold" style={{ color: "var(--cream)" }}>Tambah Anggota Baru</h3>
+              {error && (
+                <div className="text-sm px-3 py-2 rounded-xl"
+                  style={{ background: "rgba(224,96,96,0.08)", border: "1px solid rgba(224,96,96,0.2)", color: "var(--red)" }}>
+                  {error}
+                </div>
+              )}
               <form onSubmit={handleAddMember} className="space-y-3">
                 <div className="grid grid-cols-2 gap-3">
                   <div>
-                    <label className="block text-xs text-white/40 mb-1.5 uppercase tracking-wider">Nama</label>
-                    <input type="text" required placeholder="Budi" value={name} onChange={(e) => setName(e.target.value)} className="dark-input" />
+                    <label className="label-xs block mb-2">Nama</label>
+                    <input type="text" required placeholder="Budi" value={name} onChange={(e) => setName(e.target.value)} className="noir-input" />
                   </div>
                   <div>
-                    <label className="block text-xs text-white/40 mb-1.5 uppercase tracking-wider">Nomor WA</label>
-                    <input type="tel" required placeholder="08xxxxxxxxxx" value={waNumber} onChange={(e) => setWaNumber(e.target.value)} className="dark-input" />
+                    <label className="label-xs block mb-2">Nomor WA</label>
+                    <input type="tel" required placeholder="08xxxxxxxxxx" value={waNumber} onChange={(e) => setWaNumber(e.target.value)} className="noir-input" />
                   </div>
                 </div>
-                <div className="flex gap-2">
-                  <button type="button" onClick={() => setShowForm(false)} className="flex-1 py-2 rounded-xl glass text-white/50 hover:text-white text-sm transition-all">Batal</button>
-                  <button type="submit" disabled={loading} className="flex-1 gradient-btn py-2 rounded-xl text-white text-sm font-medium">
+                <div className="flex gap-2 pt-1">
+                  <button type="button" onClick={() => setShowForm(false)} className="btn-ghost" style={{ flex: 1 }}>Batal</button>
+                  <button type="submit" disabled={loading} className="btn-gold" style={{ flex: 1 }}>
                     {loading ? "Menambah..." : "Tambah"}
                   </button>
                 </div>
@@ -158,24 +177,25 @@ function BudgetTab({ isAdmin, categories, onCategoriesChange }: { isAdmin: boole
     setEditingId(null); setSaving(false);
   }
 
-  const ICON_BG = ["rgba(124,58,237,0.2)","rgba(219,39,119,0.2)","rgba(249,115,22,0.2)","rgba(20,184,166,0.2)","rgba(37,99,235,0.2)"];
-
   return (
-    <div className="space-y-3">
-      <div className="glass rounded-2xl overflow-hidden">
-        <div className="px-5 py-4 border-b" style={{ borderColor: "rgba(255,255,255,0.06)" }}>
-          <h2 className="text-sm font-semibold text-white/70">Budget per Kategori</h2>
-          <p className="text-xs text-white/30 mt-0.5">Bot kirim peringatan saat pengeluaran mencapai 90% budget</p>
+    <div>
+      <div className="noir-card-solid overflow-hidden">
+        <div className="px-5 py-4 gold-line">
+          <h2 className="text-sm font-semibold" style={{ color: "var(--cream)" }}>Budget per Kategori</h2>
+          <p className="text-xs mt-0.5" style={{ color: "var(--gold-dim)" }}>Bot kirim peringatan saat mencapai 90% budget</p>
         </div>
         <ul>
-          {categories.map((cat, i) => (
-            <li key={cat.id} className="px-4 py-3.5 flex items-center justify-between gap-4 border-b last:border-0 hover:bg-white/3 transition-colors"
-              style={{ borderColor: "rgba(255,255,255,0.05)" }}>
+          {categories.map((cat) => (
+            <li key={cat.id} className="px-4 py-3.5 flex items-center justify-between gap-4 row-div transition-colors"
+              onMouseEnter={(e) => (e.currentTarget as HTMLLIElement).style.background = "var(--gold-glow)"}
+              onMouseLeave={(e) => (e.currentTarget as HTMLLIElement).style.background = "transparent"}
+            >
               <div className="flex items-center gap-3">
-                <div className="w-9 h-9 rounded-xl flex items-center justify-center text-base" style={{ background: ICON_BG[i % ICON_BG.length] }}>
-                  {cat.icon ?? "💰"}
+                <div className="w-9 h-9 rounded-xl flex items-center justify-center text-base shrink-0"
+                  style={{ background: "rgba(212,180,131,0.08)", border: "1px solid var(--gold-border)" }}>
+                  {cat.icon ?? "◈"}
                 </div>
-                <span className="text-sm font-medium text-white/80">{cat.name}</span>
+                <span className="text-sm font-medium" style={{ color: "var(--cream)" }}>{cat.name}</span>
               </div>
 
               {editingId === cat.id ? (
@@ -185,26 +205,34 @@ function BudgetTab({ isAdmin, categories, onCategoriesChange }: { isAdmin: boole
                     placeholder="500000"
                     value={budgetInput}
                     onChange={(e) => setBudgetInput(e.target.value)}
-                    className="dark-input w-28 text-xs py-1.5"
+                    className="noir-input"
+                    style={{ width: "7rem", fontSize: "12px" }}
                     autoFocus
                   />
                   <button onClick={() => handleSaveBudget(cat.id)} disabled={saving}
-                    className="text-xs px-3 py-1.5 rounded-lg gradient-btn text-white font-medium disabled:opacity-50">
+                    className="btn-gold disabled:opacity-50"
+                    style={{ width: "auto", padding: "6px 12px", fontSize: "11px" }}>
                     {saving ? "..." : "Simpan"}
                   </button>
-                  <button onClick={() => setEditingId(null)} className="text-xs text-white/40 hover:text-white px-2 py-1.5 rounded-lg hover:bg-white/5 transition-all">
-                    Batal
-                  </button>
+                  <button onClick={() => setEditingId(null)}
+                    className="text-xs px-2 py-1.5 rounded-lg transition-all"
+                    style={{ color: "var(--cream-dim)" }}
+                    onMouseEnter={(e) => (e.currentTarget as HTMLButtonElement).style.color = "var(--cream)"}
+                    onMouseLeave={(e) => (e.currentTarget as HTMLButtonElement).style.color = "var(--cream-dim)"}
+                  >Batal</button>
                 </div>
               ) : (
                 <div className="flex items-center gap-3">
-                  <span className={`text-sm font-medium ${cat.monthlyBudget ? "text-white/60" : "text-white/20"}`}>
+                  <span className="text-sm" style={{ color: cat.monthlyBudget ? "var(--gold-dim)" : "var(--cream-faint)" }}>
                     {cat.monthlyBudget ? `Rp${cat.monthlyBudget.toLocaleString("id-ID")}/bln` : "Belum diset"}
                   </span>
                   {isAdmin && (
                     <button
                       onClick={() => { setEditingId(cat.id); setBudgetInput(cat.monthlyBudget?.toString() ?? ""); }}
-                      className="text-xs px-3 py-1.5 rounded-xl glass text-white/50 hover:text-white transition-all"
+                      className="text-xs px-3 py-1.5 rounded-lg transition-all"
+                      style={{ color: "var(--gold-dim)", border: "1px solid var(--gold-border)" }}
+                      onMouseEnter={(e) => { (e.currentTarget as HTMLButtonElement).style.color = "var(--gold)"; (e.currentTarget as HTMLButtonElement).style.background = "var(--gold-glow)"; }}
+                      onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.color = "var(--gold-dim)"; (e.currentTarget as HTMLButtonElement).style.background = "transparent"; }}
                     >
                       Ubah
                     </button>

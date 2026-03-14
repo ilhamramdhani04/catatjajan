@@ -32,73 +32,80 @@ export default function RegisterPage() {
       waNumber: waNumber ? normalizeWaNumber(waNumber) : undefined,
       callbackURL: "/dashboard",
     });
-    if (authError) {
-      setError(authError.message ?? "Pendaftaran gagal. Coba lagi.");
-      setLoading(false);
-      return;
-    }
+    if (authError) { setError(authError.message ?? "Pendaftaran gagal."); setLoading(false); return; }
     router.push("/dashboard");
   }
 
   return (
-    <div className="min-h-screen mesh-bg flex items-center justify-center px-4 relative overflow-hidden">
-      {/* Background orbs */}
-      <div className="orb w-80 h-80 bg-violet-600 top-[-80px] right-[-60px] animate-blob" />
-      <div className="orb w-96 h-96 bg-pink-600 bottom-[-80px] left-[-80px] animate-blob2" />
-      <div className="orb w-56 h-56 bg-teal-500 top-1/3 left-10 animate-float2" />
+    <div className="min-h-screen flex items-center justify-center px-4 relative overflow-hidden"
+      style={{ background: "var(--black)" }}>
 
-      {/* Floating shapes */}
-      <div className="absolute top-16 right-16 w-10 h-10 rounded-2xl card-orange animate-float opacity-50" />
-      <div className="absolute bottom-40 right-24 w-8 h-8 rounded-xl card-purple animate-float3 opacity-40" />
+      <div className="bg-glow w-[500px] h-[500px]"
+        style={{ top: "-100px", left: "-100px", background: "rgba(212,180,131,0.05)" }} />
+      <div className="bg-glow w-[350px] h-[350px]"
+        style={{ bottom: "-80px", right: "-80px", background: "rgba(212,180,131,0.04)" }} />
 
-      <div className="relative z-10 w-full max-w-sm animate-slide-up">
-        <div className="glass rounded-3xl p-8 shadow-2xl" style={{ boxShadow: "0 25px 60px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.08)" }}>
-          <div className="text-center mb-7">
-            <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl gradient-btn mb-4">
-              <span className="text-2xl">✨</span>
+      <div className="relative z-10 w-full max-w-sm">
+        <div className="text-center mb-8 anim-fade-up">
+          <div className="inline-flex flex-col items-center gap-3">
+            <div className="w-12 h-12 rounded-2xl flex items-center justify-center text-xl"
+              style={{ background: "rgba(212,180,131,0.1)", border: "1px solid var(--gold-border)" }}>
+              ◈
             </div>
-            <h1 className="text-2xl font-bold gradient-text">Buat Akun</h1>
-            <p className="text-sm text-white/40 mt-1">Bergabung dengan CatatJajan</p>
+            <div className="text-xs tracking-[0.28em] uppercase" style={{ color: "var(--gold-dim)" }}>CatatJajan</div>
           </div>
+        </div>
+
+        <div className="noir-card-solid p-8 anim-fade-up d-2">
+          <h2 className="text-xl font-semibold mb-1" style={{ color: "var(--cream)", letterSpacing: "-0.02em" }}>
+            Buat akun baru
+          </h2>
+          <p className="text-sm mb-7" style={{ color: "var(--cream-dim)" }}>
+            Mulai catat pengeluaran keluarga via WhatsApp
+          </p>
 
           {error && (
-            <div className="mb-4 px-4 py-3 rounded-xl bg-red-500/10 border border-red-500/30 text-red-400 text-sm animate-scale-in">
-              ⚠️ {error}
+            <div className="anim-scale-in mb-5 px-4 py-3 rounded-xl text-sm"
+              style={{ background: "rgba(224,96,96,0.08)", border: "1px solid rgba(224,96,96,0.2)", color: "var(--red)" }}>
+              {error}
             </div>
           )}
 
-          <form onSubmit={handleSubmit} className="space-y-3">
+          <form onSubmit={handleSubmit} className="space-y-5">
             <div>
-              <label className="block text-xs font-medium text-white/50 mb-1.5 uppercase tracking-wider">Nama Lengkap</label>
-              <input type="text" required placeholder="John Doe" value={name} onChange={(e) => setName(e.target.value)} className="dark-input" />
+              <label className="label-xs block mb-3">Nama Lengkap</label>
+              <input type="text" required placeholder="John Doe" value={name}
+                onChange={(e) => setName(e.target.value)} className="noir-input" />
             </div>
             <div>
-              <label className="block text-xs font-medium text-white/50 mb-1.5 uppercase tracking-wider">Email</label>
-              <input type="email" required autoComplete="email" placeholder="nama@email.com" value={email} onChange={(e) => setEmail(e.target.value)} className="dark-input" />
+              <label className="label-xs block mb-3">Email</label>
+              <input type="email" required autoComplete="email" placeholder="nama@email.com" value={email}
+                onChange={(e) => setEmail(e.target.value)} className="noir-input" />
             </div>
             <div>
-              <label className="block text-xs font-medium text-white/50 mb-1.5 uppercase tracking-wider">Nomor WhatsApp</label>
-              <input type="tel" placeholder="08xxxxxxxxxx" value={waNumber} onChange={(e) => setWaNumber(e.target.value)} className="dark-input" />
+              <label className="label-xs block mb-3">Nomor WhatsApp</label>
+              <input type="tel" placeholder="08xxxxxxxxxx" value={waNumber}
+                onChange={(e) => setWaNumber(e.target.value)} className="noir-input" />
             </div>
             <div>
-              <label className="block text-xs font-medium text-white/50 mb-1.5 uppercase tracking-wider">Password</label>
-              <input type="password" required autoComplete="new-password" placeholder="Min. 8 karakter" value={password} onChange={(e) => setPassword(e.target.value)} className="dark-input" />
+              <label className="label-xs block mb-3">Password</label>
+              <input type="password" required autoComplete="new-password" placeholder="Min. 8 karakter"
+                value={password} onChange={(e) => setPassword(e.target.value)} className="noir-input" />
             </div>
-            <button type="submit" disabled={loading} className="gradient-btn w-full py-3 rounded-xl text-white font-semibold text-sm mt-1">
-              {loading ? (
-                <span className="flex items-center justify-center gap-2">
-                  <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin inline-block" />
-                  Mendaftar...
-                </span>
-              ) : "Daftar Sekarang →"}
-            </button>
+            <div className="pt-2">
+              <button type="submit" disabled={loading} className="btn-gold">
+                {loading
+                  ? <><span className="w-4 h-4 rounded-full border-2 border-black/30 border-t-black anim-spin" />Mendaftar...</>
+                  : "Buat Akun"}
+              </button>
+            </div>
           </form>
-
-          <p className="text-center text-sm text-white/30 mt-5">
-            Sudah punya akun?{" "}
-            <Link href="/login" className="text-purple-400 hover:text-purple-300 font-medium transition-colors">Masuk</Link>
-          </p>
         </div>
+
+        <p className="text-center text-sm mt-6 anim-fade-up d-3" style={{ color: "var(--cream-faint)" }}>
+          Sudah punya akun?{" "}
+          <Link href="/login" style={{ color: "var(--gold)" }}>Masuk</Link>
+        </p>
       </div>
     </div>
   );

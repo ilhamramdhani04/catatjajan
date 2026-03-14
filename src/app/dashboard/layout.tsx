@@ -11,47 +11,48 @@ export default async function DashboardLayout({ children }: { children: React.Re
   const user = session.user;
 
   return (
-    <div className="min-h-screen mesh-bg">
+    <div className="min-h-screen" style={{ background: "var(--black)" }}>
       {/* Navbar */}
-      <header className="sticky top-0 z-50" style={{ background: "rgba(7,7,17,0.8)", backdropFilter: "blur(20px)", borderBottom: "1px solid rgba(255,255,255,0.06)" }}>
-        <div className="max-w-5xl mx-auto px-4 h-15 flex items-center justify-between py-3">
+      <header className="sticky top-0 z-50"
+        style={{ background: "rgba(8,7,15,0.85)", backdropFilter: "blur(20px)", borderBottom: "1px solid var(--gold-border)" }}>
+        <div className="max-w-5xl mx-auto px-4 h-14 flex items-center justify-between">
           {/* Logo */}
           <Link href="/dashboard" className="flex items-center gap-2.5 group">
-            <div className="w-8 h-8 rounded-xl gradient-btn flex items-center justify-center text-sm shadow-glow transition-transform group-hover:scale-110">
-              💰
+            <div className="w-8 h-8 rounded-xl flex items-center justify-center transition-transform group-hover:scale-105"
+              style={{ background: "rgba(212,180,131,0.1)", border: "1px solid var(--gold-border)" }}>
+              <span style={{ color: "var(--gold)" }}>◈</span>
             </div>
-            <span className="font-bold gradient-text text-lg">CatatJajan</span>
+            <span className="font-semibold text-sm tracking-wide" style={{ color: "var(--cream)" }}>CatatJajan</span>
           </Link>
 
           {/* Nav links */}
           <nav className="flex items-center gap-1">
-            <Link
-              href="/dashboard"
-              className="px-3 py-1.5 rounded-xl text-sm text-white/50 hover:text-white/90 hover:bg-white/5 transition-all"
-            >
-              Dashboard
-            </Link>
-            <Link
-              href="/dashboard/transactions"
-              className="px-3 py-1.5 rounded-xl text-sm text-white/50 hover:text-white/90 hover:bg-white/5 transition-all"
-            >
-              Transaksi
-            </Link>
-            <Link
-              href="/dashboard/settings"
-              className="px-3 py-1.5 rounded-xl text-sm text-white/50 hover:text-white/90 hover:bg-white/5 transition-all"
-            >
-              Pengaturan
-            </Link>
+            {[
+              { href: "/dashboard", label: "Dashboard" },
+              { href: "/dashboard/transactions", label: "Transaksi" },
+              { href: "/dashboard/settings", label: "Pengaturan" },
+            ].map(({ href, label }) => (
+              <Link
+                key={href}
+                href={href}
+                className="px-3 py-1.5 rounded-lg text-xs font-medium transition-all"
+                style={{ color: "var(--cream-dim)" }}
+                onMouseEnter={(e) => { (e.currentTarget as HTMLAnchorElement).style.color = "var(--gold)"; (e.currentTarget as HTMLAnchorElement).style.background = "var(--gold-glow)"; }}
+                onMouseLeave={(e) => { (e.currentTarget as HTMLAnchorElement).style.color = "var(--cream-dim)"; (e.currentTarget as HTMLAnchorElement).style.background = "transparent"; }}
+              >
+                {label}
+              </Link>
+            ))}
           </nav>
 
-          {/* User info + signout */}
+          {/* User info */}
           <div className="flex items-center gap-3">
             <div className="hidden sm:flex items-center gap-2">
-              <div className="w-7 h-7 rounded-lg gradient-btn flex items-center justify-center text-xs font-bold text-white">
+              <div className="w-7 h-7 rounded-lg flex items-center justify-center text-xs font-bold"
+                style={{ background: "rgba(212,180,131,0.12)", border: "1px solid var(--gold-border)", color: "var(--gold)" }}>
                 {user.name.charAt(0).toUpperCase()}
               </div>
-              <span className="text-sm text-white/60">{user.name}</span>
+              <span className="text-xs" style={{ color: "var(--cream-dim)" }}>{user.name}</span>
             </div>
             <SignOutButton />
           </div>

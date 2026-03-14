@@ -8,19 +8,14 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        brand: {
-          purple: "#7c3aed",
-          pink: "#db2777",
-          orange: "#f97316",
-          teal: "#14b8a6",
-        },
-      },
-      backgroundImage: {
-        "gradient-brand": "linear-gradient(135deg, #7c3aed, #db2777, #f97316)",
+        gold: "#D4B483",
+        "gold-bright": "#F0CE94",
+        cream: "#EDE4D0",
+        noir: "#08070F",
       },
       boxShadow: {
-        glow: "0 0 30px rgba(124, 58, 237, 0.3)",
-        "glow-pink": "0 0 30px rgba(219, 39, 119, 0.3)",
+        gold: "0 8px 32px rgba(212,180,131,0.28)",
+        "gold-sm": "0 2px 12px rgba(212,180,131,0.15)",
       },
     },
   },
