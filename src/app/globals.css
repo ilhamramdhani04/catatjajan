@@ -38,6 +38,8 @@ body {
 /* ── Typography ────────────────────────────────────────────────────────────── */
 .label-xs { font-size:10px; font-weight:600; letter-spacing:0.18em; text-transform:uppercase; color:var(--gold-dim); }
 .gold-text  { color: var(--gold); }
+.nav-link   { color:var(--cream-dim); transition:color .15s,background .15s; }
+.nav-link:hover { color:var(--gold); background:var(--gold-glow); }
 .cream-text { color: var(--cream); }
 
 /* ── Cards ─────────────────────────────────────────────────────────────────── */

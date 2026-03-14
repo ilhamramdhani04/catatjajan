@@ -35,10 +35,7 @@ export default async function DashboardLayout({ children }: { children: React.Re
               <Link
                 key={href}
                 href={href}
-                className="px-3 py-1.5 rounded-lg text-xs font-medium transition-all"
-                style={{ color: "var(--cream-dim)" }}
-                onMouseEnter={(e) => { (e.currentTarget as HTMLAnchorElement).style.color = "var(--gold)"; (e.currentTarget as HTMLAnchorElement).style.background = "var(--gold-glow)"; }}
-                onMouseLeave={(e) => { (e.currentTarget as HTMLAnchorElement).style.color = "var(--cream-dim)"; (e.currentTarget as HTMLAnchorElement).style.background = "transparent"; }}
+                className="nav-link px-3 py-1.5 rounded-lg text-xs font-medium"
               >
                 {label}
               </Link>
