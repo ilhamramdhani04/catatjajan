@@ -87,16 +87,21 @@ export default async function DashboardPage() {
 
 function NeedFamilySetup() {
   return (
-    <div className="flex flex-col items-center justify-center min-h-[60vh] gap-4 text-center">
-      <p className="text-gray-600">
-        Kamu belum bergabung ke grup keluarga. Buat grup atau minta admin untuk
-        menambahkanmu.
-      </p>
+    <div className="flex flex-col items-center justify-center min-h-[60vh] gap-5 text-center animate-slide-up">
+      <div className="w-20 h-20 rounded-3xl gradient-btn flex items-center justify-center text-4xl shadow-glow">
+        🏠
+      </div>
+      <div>
+        <h2 className="text-xl font-bold gradient-text">Belum ada grup keluarga</h2>
+        <p className="text-sm text-white/40 mt-2 max-w-xs">
+          Buat grup keluarga atau minta admin untuk menambahkanmu.
+        </p>
+      </div>
       <a
         href="/dashboard/setup"
-        className="bg-blue-600 text-white px-6 py-2 rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors"
+        className="gradient-btn px-6 py-2.5 rounded-xl text-white text-sm font-semibold"
       >
-        Buat Grup Keluarga
+        Buat Grup Keluarga →
       </a>
     </div>
   );
