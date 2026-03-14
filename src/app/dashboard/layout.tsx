@@ -2,7 +2,9 @@ import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { auth } from "@/lib/auth";
 import Link from "next/link";
+
 import PushSetup from "@/components/push-setup";
+import SignOutButton from "@/components/sign-out-button";
 
 export default async function DashboardLayout({
   children,
@@ -39,14 +41,7 @@ export default async function DashboardLayout({
               Pengaturan
             </Link>
             <span className="text-sm text-gray-600">{user.name}</span>
-            <form action="/api/auth/sign-out" method="POST">
-              <button
-                type="submit"
-                className="text-sm text-gray-500 hover:text-red-600 transition-colors"
-              >
-                Keluar
-              </button>
-            </form>
+            <SignOutButton />
           </div>
         </div>
       </header>
