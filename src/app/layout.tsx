@@ -5,7 +5,7 @@ import "./globals.css";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "CatatJajan — Pencatat Pengeluaran Keluarga",
+  title: "CatatJajan — Catat Pengeluaran via WhatsApp",
   description: "Catat pengeluaran keluarga cukup lewat WhatsApp.",
 };
 
@@ -16,7 +16,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="id">
-      <body className={inter.className}>{children}</body>
+      <body className={`${inter.className} bg-[#070711] text-white`}>{children}</body>
     </html>
   );
 }
