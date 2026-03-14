@@ -16,22 +16,23 @@
     "test:coverage": "vitest run --coverage"
   },
   "dependencies": {
-    "next": "^15.3.0",
-    "react": "^19.0.0",
-    "react-dom": "^19.0.0",
-    "better-auth": "^1.2.0",
-    "drizzle-orm": "^0.38.0",
-    "postgres": "^3.4.5",
-    "recharts": "^2.13.0",
     "@radix-ui/react-dialog": "^1.1.0",
     "@radix-ui/react-label": "^2.1.0",
     "@radix-ui/react-select": "^2.1.0",
     "@radix-ui/react-slot": "^1.1.0",
     "@radix-ui/react-toast": "^1.2.0",
+    "better-auth": "^1.2.0",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.0",
-    "tailwind-merge": "^2.5.0",
+    "drizzle-orm": "^0.38.0",
+    "gsap": "^3.14.2",
     "lucide-react": "^0.460.0",
+    "next": "^15.3.0",
+    "postgres": "^3.4.5",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "recharts": "^2.13.0",
+    "tailwind-merge": "^2.5.0",
     "web-push": "^3.6.7"
   },
   "devDependencies": {
@@ -39,14 +40,14 @@
     "@types/react": "^19.0.0",
     "@types/react-dom": "^19.0.0",
     "@types/web-push": "^3.6.4",
+    "@vitejs/plugin-react": "^4.3.0",
+    "@vitest/coverage-v8": "^2.1.0",
+    "autoprefixer": "^10.4.0",
     "drizzle-kit": "^0.30.0",
+    "postcss": "^8.4.0",
+    "tailwindcss": "^3.4.0",
     "tsx": "^4.19.0",
     "typescript": "^5.7.0",
-    "tailwindcss": "^3.4.0",
-    "autoprefixer": "^10.4.0",
-    "postcss": "^8.4.0",
-    "vitest": "^2.1.0",
-    "@vitejs/plugin-react": "^4.3.0",
-    "@vitest/coverage-v8": "^2.1.0"
+    "vitest": "^2.1.0"
   }
 }
